@@ -133,12 +133,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserPet"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserPetCreate"
+                $ref: "#/components/schemas/DeletedPet"
+  
 
 
 
@@ -360,15 +356,25 @@ components:
           type: string
           example: 2022-12-15T11:24:10.750Z
 
-
-
-
     Logout:
       type: object
       properties:
         status:
           type: string
           example: success
+
+    DeletedPet:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success 
+        code:
+          type: string
+          example: 200
+        message:
+          type: string
+          example: Pet deleted         
 
     Notices:
       type: object
@@ -383,6 +389,7 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Notice"      
+    
     Notice:
       type: object
       properties:
@@ -434,11 +441,6 @@ components:
             phone:
               type: string
               example: +38 (066) 733 88 45
-
-
-            
-
-
 
     Pet:
       type: object
