@@ -7,7 +7,7 @@ servers:
     url: https://petly-bc26.cyclic.app/
 info:
   version: "1.0.0"
-  title: API resource for finding animals
+  title: API TEAM-PROJECT PETLY
   description: main roads to create requests
 paths:
   /api/users/signup:
@@ -63,6 +63,7 @@ paths:
     get:
       tags:
         - User
+      summary: "Get current user"
       description: Must have active token,  post token in block Authorize
       operationId: getCurrentUser
 
@@ -78,6 +79,7 @@ paths:
     patch:
       tags:
         - User
+      summary: "User update"
       operationId: UserUpdate
       description: Must have active token,  post token in block Authorize
       responses:
@@ -97,6 +99,7 @@ paths:
     post:
       tags:
         - User
+      summary: "Create pet"
       operationId: createPet
       description: Must have active token,  post token in block Authorize
       responses:
@@ -134,16 +137,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeletedPet"
-  
-
-
 
   /api/notices:
     get:
       tags:
         - Notices
       operationId: getNotices
-      description: Must have active token,  post token in block Authorize
+      
       responses:
         "200":
           description: response
@@ -151,7 +151,165 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Notices"
+           
+  /api/notices/create:
+    post:
+      tags:
+        - Notices
+      operationId: getNotices
+      description: Must have active token,  post token in block Authorize
       
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notice"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CreateNotice"
+
+  /api/notices/category/{category}:
+    get:
+      tags:
+        - Notices
+      summary: "search by category "
+      operationId: getNoticeCategory
+      parameters:
+      - name: "category"
+        in: "path"
+        description: "category of notices"
+        required: true
+        schema:
+         type: string
+         enum: [sell, lost-found, for-free]
+         example: lost-found
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/ResNoticesCategory"
+                  
+  /api/notices/{noticeId}:
+    get:
+      tags:
+        - Notices
+      summary: "search by id "
+      operationId: getNoticeCategory
+      parameters:
+      - name: "noticeId"
+        in: "path"
+        description: "id of notices"
+        required: true
+        schema:
+         type: string
+         example: 6399e0f49b156ec8b9e8d3dd
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Notice"                
+
+  /api/notices/favorites/{noticeId}:
+    get:
+      tags:
+        - Notices
+      summary: "Add note to favorites"
+      operationId: getNoticeCategory
+      parameters:
+      - name: "noticeId"
+        in: "path"
+        description: "id of notices"
+        required: true
+        schema:
+         type: string
+         example: 6399e0f49b156ec8b9e8d3dd
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/NoticesFavorites"                    
+  
+  /api/notices/favorites:
+    get:
+      tags:
+        - Notices
+      operationId: getFavoritesNotices
+      
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notices"
+
+  /api/notices/favorites/delete/{noticeId}:
+    delete:
+      tags:
+        - Notices
+      summary: "Delete note from favorites"
+      operationId: deletedFavorites
+      parameters:
+      - name: "noticeId"
+        in: "path"
+        description: "id of notices"
+        required: true
+        schema:
+         type: string
+         example: 6399e0f49b156ec8b9e8d3dd
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/DeleteNoticesFavorites"
+
+  /api/notices/personal:
+    get:
+      tags:
+        - Notices
+      operationId: getFavoritesPersonal
+      
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notices"
+
+  /api/notices/delete/{noticeId}:
+    delete:
+      tags:
+        - Notices
+      summary: "Delete from personal notices"
+      operationId: deletedNotices
+      parameters:
+      - name: "noticeId"
+        in: "path"
+        description: "id of notices"
+        required: true
+        schema:
+         type: string
+         example: 6399e0f49b156ec8b9e8d3dd
+      responses:
+        "200":
+          description: response
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/DeletePersonalNotices"
 
 components:
   schemas:
@@ -363,6 +521,65 @@ components:
           type: string
           example: success
 
+    ResNoticesCategory:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        status:
+          type: string
+          example: success
+        data:
+          type: array
+          items:  
+           $ref: "#/components/schemas/Notice"         
+        totalPages: 
+          type: number
+          example: 0
+        page: 
+          type: number
+          example: 1
+
+    NoticesFavorites:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        status:
+          type: string
+          example: success
+        massage: 
+          type: string
+          example: Notice is added to favorites
+    
+    DeleteNoticesFavorites:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        status:
+          type: string
+          example: success
+        massage: 
+          type: string
+          example: Notice is deleted from favorites
+
+    DeletePersonalNotices:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        status:
+          type: string
+          example: success
+        massage: 
+          type: string
+          example: Notice is removed
+
     DeletedPet:
       type: object
       properties:
@@ -442,6 +659,46 @@ components:
               type: string
               example: +38 (066) 733 88 45
 
+    CreateNotice:
+      type: object
+      properties:
+        category:
+          type: string
+          example: sell
+        title:
+          type: string
+          example: some title
+        name:
+          type: string
+          example: some name  
+        birthday:
+          type: string
+          example: 2015.10.12
+        breed:
+          type: string
+          example: some breed
+        sex:
+          type: string
+          example: male
+        location:
+          type: string
+          example: Kyiv, Kyivska
+        photoURL:
+          type: string
+          example: photo URL
+        photoId:
+          type: string
+          example: photo _id
+        comments:
+          type: string
+          example: comments
+        price:
+          type: number
+          example: 100
+        image:
+          type: string
+          format: binary
+              
     Pet:
       type: object
       properties:
