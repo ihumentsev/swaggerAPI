@@ -91,7 +91,7 @@ paths:
                 $ref: "#/components/schemas/User"
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/UserUpdate"
 
@@ -111,7 +111,7 @@ paths:
                 $ref: "#/components/schemas/UserPet"
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/UserPetCreate"
 
@@ -340,31 +340,25 @@ components:
 
     UserUpdate:
       type: object
-      required:
-        - password
-        - email
-        - city
-        - phone
-        - name
       properties:
-        birthday:
+        name:
           type: string
-          example: 2015.07.11
+          example:
         email:
           type: string
           example: tomat@Nulla.com
-        city:
-          type: string
-          example: Kiev, Shevchenko 38
         phone:
           type: string
-          example: +380509008562
-        name:
+          example: +380509008562 
+        city:
           type: string
-          example: Andrii
-        avatarURL:
+          example: Kiev, Shevchenko 38    
+        birthday:
           type: string
-          example: https://avatars.dzeninfra.ru/get-zen_doc/scale_1200
+          example: 2015.07.11    
+        image:
+          type: string
+          format: binary
 
     UserLogin:
       type: object
@@ -455,11 +449,7 @@ components:
       type: object
       required:
         - name
-        - birthday
         - breed
-        - photoURL
-        - photoId
-        - comments
       properties:
         name:
           type: string
@@ -470,12 +460,9 @@ components:
         breed:
           type: string
           example: labrador
-        photoURL:
+        image:
           type: string
-          example: https://www.novochag.ru/upload/img_cache/cdb/cdb894b14356d88d490e59b3199e3845
-        photoId:
-          type: string
-          example: 65657444466565
+          format: binary
         comments:
           type: string
           example: SFHDBfhrgjrjgn  
@@ -664,7 +651,7 @@ components:
       properties:
         category:
           type: string
-          example: sell
+          enum: ["sell", "lost-found", "for-free" ]
         title:
           type: string
           example: some title
@@ -679,7 +666,7 @@ components:
           example: some breed
         sex:
           type: string
-          example: male
+          enum: ["male", "female" ]
         location:
           type: string
           example: Kyiv, Kyivska
